@@ -2105,8 +2105,8 @@ render();addEventListener('load',()=>{last='';render()});setTimeout(()=>{last=''
  try{localStorage.setItem(KEY,me)}catch(e){}
  function anchors(){return [].slice.call(document.querySelectorAll('[id^="sec-"],[id^="part-"]'))}
  function box(el){var s=el.closest('section')||el,r=s.getBoundingClientRect();return {top:r.top+scrollY,h:Math.max(r.height,1)}}
- // текущая глава: последний якорь, чья секция началась выше трети экрана
- function where(){var cur=null,y=scrollY+innerHeight/3;anchors().forEach(function(a){if(box(a).top<=y)cur=a});
+ // текущая глава: последний якорь, чья секция началась выше верхней полосы экрана (не трети: на телефоне в режиме 1280 экран очень высокий)
+ function where(){var cur=null,y=scrollY+Math.min(innerHeight/3,160);anchors().forEach(function(a){if(box(a).top<=y)cur=a});
   if(!cur)return null;var b=box(cur);return {id:cur.id,k:Math.min(Math.max((scrollY-b.top)/b.h,0),1)}}
  function go(e){e.preventDefault();var p=where(),url='../'+other+'/'+(p?'#'+p.id:'');
   try{localStorage.setItem(KEY,other);if(p)sessionStorage.setItem(POS,JSON.stringify(p))}catch(_){}
